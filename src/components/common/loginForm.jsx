@@ -13,24 +13,38 @@ class LoginForm extends Component {
   //   username = React.createRef();
 
   schema = {
-    username: Joi.string().required(),
-    password: Joi.string().required()
+    username: Joi.string()
+      .required()
+      .label("Username"),
+    password: Joi.string()
+      .required()
+      .label("Password")
   };
 
   validate = () => {
-    const result = Joi.validate(this.state.account, this.schema, {
-      abortEarly: false
-    });
-    console.log(result);
-    const errors = {};
-    const { account } = this.state;
-    if (account.username.trim() === "")
-      errors.username = "Username is required";
-    if (account.password.trim() === "")
-      errors.password = "Password is required";
+    const options = { abortEarly: false };
+    const result = Joi.validate(this.state.account, this.schema, options);
+    // console.log(result);
+    if (!result.error) return null;
 
-    return Object.keys(errors).length === 0 ? {} : errors;
+    const errors = {};
+    for (let item of result.error.details) {
+      errors[item.path[0]] = item.message;
+    }
+
+    return errors;
   };
+
+  //   validate = () => {
+  //     const errors = {};
+  //     const { account } = this.state;
+  //     if (account.username.trim() === "")
+  //       errors.username = "Username is required";
+  //     if (account.password.trim() === "")
+  //       errors.password = "Password is required";
+
+  //     return Object.keys(errors).length === 0 ? {} : errors;
+  //   };
 
   handleSubmit = e => {
     e.preventDefault();
@@ -48,14 +62,21 @@ class LoginForm extends Component {
   //       this.username.current.focus();
   //   }
 
-  validateProperty = input => {
-    if (input.name === "username") {
-      if (input.value.trim() === "") return "Username is required";
-    }
+  //   validateProperty = input => {
+  //     if (input.name === "username") {
+  //       if (input.value.trim() === "") return "Username is required";
+  //     }
 
-    if (input.name === "password") {
-      if (input.value.trim() === "") return "Password is required";
-    }
+  //     if (input.name === "password") {
+  //       if (input.value.trim() === "") return "Password is required";
+  //     }
+  //   };
+
+  validateProperty = input => {
+    const obj = { [input.name]: input.value };
+    const schema = { [input.name]: this.schema[input.name] };
+    const { error } = Joi.validate(obj, schema);
+    return error ? error.details[0].message : null;
   };
 
   handleChange = e => {
@@ -96,7 +117,11 @@ class LoginForm extends Component {
             error={this.state.errors.password}
           />
 
-          <button onClick={this.handleSubmit} className="btn btn-primary">
+          <button
+            disabled={this.validate()}
+            onClick={this.handleSubmit}
+            className="btn btn-primary"
+          >
             Login
           </button>
         </form>
