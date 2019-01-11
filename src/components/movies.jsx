@@ -6,7 +6,7 @@ import MoviesTable from "./moviesTable";
 import Pagination from "./common/pagination";
 import ListGroup from "./common/list-groupt";
 import { paginate } from "../utils/paginate";
-import { moviesByGenre } from "../utils/movieByGenre";
+// import { moviesByGenre } from "../utils/movieByGenre";
 import _ from "lodash";
 
 class Movies extends Component {
