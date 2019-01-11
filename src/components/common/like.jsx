@@ -1,19 +1,19 @@
 import React, { Component } from "react";
 
 class Like extends Component {
-  state = {
-    liked: this.props.movie.liked
-  };
+  // state = {
+  //   liked: this.props.movie.liked
+  // };
 
-  handleLike = () => {
-    const liked = !this.state.liked;
-    this.setState({
-        liked
-    });
-  };
+  // handleLike = () => {
+  //   const liked = !this.props.liked;
+  //   this.setState({
+  //       liked
+  //   });
+  // };
 
   classes = () => {
-    if (this.state.liked) {
+    if (this.props.liked) {
       return "fa fa-heart";
     } else {
       return "fa fa-heart-o";
@@ -26,7 +26,7 @@ class Like extends Component {
         style={{ cursor: "pointer" }}
         className={this.classes()}
         aria-hidden="true"
-        onClick={this.handleLike}
+        onClick={this.props.onClick}
       />
     );
   }
