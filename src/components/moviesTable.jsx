@@ -5,17 +5,21 @@ import {Link} from "react-router-dom";
 
 class MoviesTable extends Component {
   columns = [
-    { path: "title", label: "Title", content: movie => (
-      <Link to={`/movie/${movie._id}`} >
-        {movie.title}
-      </Link>
-    ) },
+    { 
+      path: "title", 
+      label: "Title", 
+      content: movie => (
+        <Link to={`/movie/${movie._id}`} >
+          {movie.title}
+        </Link>
+      ) 
+    },
     { path: "genre.name", label: "Genre" },
     { path: "numberInStock", label: "Stock" },
     { path: "dailyRentalRate", label: "Rate" },
     {
       path:"like",
-      key: "like",
+      // key: "like",
       label: "Like",
       content: movie => (
         <Like
@@ -27,7 +31,7 @@ class MoviesTable extends Component {
     },
     {
       path:"delete",
-      key: "delete",
+      // key: "delete",
       label: "Delete",
       content: movie => (
         <button onClick={() => this.props.onDelete(movie)} className="btn btn-danger">
