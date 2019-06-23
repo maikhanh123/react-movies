@@ -12,6 +12,7 @@ class Form extends Component {
   validate = () => {
     const options = { abortEarly: false };
     const result = Joi.validate(this.state.data, this.schema, options);
+    console.log(result);
     if (!result.error) return null;
 
     const errors = {};
@@ -41,6 +42,7 @@ class Form extends Component {
   };
 
   handleChange = e => {
+    console.log(e);
     const errors = { ...this.state.errors };
     const errorMessage = this.validateProperty(e.currentTarget);
     if (errorMessage) errors[e.currentTarget.name] = errorMessage;
@@ -69,7 +71,6 @@ class Form extends Component {
         name={name}
         value={data[name]}
         type={type}
-        // autoFocus
         label={label}
         onChange={this.handleChange}
         error={errors[name]}

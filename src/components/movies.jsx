@@ -91,7 +91,7 @@ class Movies extends Component {
             value={searchQuery}
             className="form-control my-3"
             placeholder="Search..."
-            onChange={this.hanleSearch}
+            onChange={this.handleSearch}
           />
 
           <br />
@@ -115,7 +115,7 @@ class Movies extends Component {
     );
   }
 
-  hanleSearch = e => {
+  handleSearch = e => {
     const searchQuery = e.currentTarget.value;
     this.setState({
       searchQuery,
@@ -123,6 +123,11 @@ class Movies extends Component {
       currentPage: 1
     });
   };
+
+  //Can be use this method for search engin
+  // handleSearch2 = query => {
+  //   this.setState({ searchQuery : query, selectedGenre: null, currentPage: 1});
+  // }
 
   handleSort = sortColumn => {
     this.setState({

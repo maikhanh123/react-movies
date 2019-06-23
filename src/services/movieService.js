@@ -42,9 +42,7 @@ export function saveMovie(movie) {
     // return movieInDb;
 
     if (movie._id) {
-        const body = {
-            ...movie
-        };
+        const body = {...movie};
         delete body._id;
         return http.put(movieUrl(movie._id), body);
     }
