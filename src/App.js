@@ -10,23 +10,17 @@ import NotFound from "./components/common/not-found";
 import LoginForm from './components/loginForm';
 import Register from './components/registerForm';
 import {ToastContainer} from "react-toastify";
-import jwtDecode from 'jwt-decode';
 import "react-toastify/dist/ReactToastify.css";
 import Demo from './components/demo';
 import Logout from './components/logout';
+import auth from './services/authService';
 
 class App extends Component {
   state = {};
 
   componentDidMount() {
-    try {
-      const jwt = localStorage.getItem("token");
-      const user = jwtDecode(jwt);
-      console.log(user);
-      this.setState({user});
-    } catch (ex) {
-      
-    }
+    const user = auth.getCurrentUser();
+    this.setState({user});
   }
 
   render() {
@@ -36,7 +30,7 @@ class App extends Component {
             <main className="container">
               <Navbar user={this.state.user}/>
               <Switch>
-                <Route path="/movies" component={Movies} />
+                <Route path="/movies" render={props => <Movies {...props} user={this.state.user} /> }/>
                 <Route path="/demo" component={Demo} />
                 <Route path="/customers" component={Customers} />
                 <Route path="/rentals" component={Rentals} />
@@ -44,7 +38,13 @@ class App extends Component {
                 <Route path="/logout" component={Logout} />
                 <Route path="/register" component={Register} />
                 {/* <Route path="/movie/new" component={MovieForm} /> */}
-                <Route path="/movie/:id" component={MovieForm} />
+                <Route 
+                  path="/movie/:id" 
+                  render={props => {
+                    if(!this.state.user) return <Redirect to ="/login" />;
+                    return <MovieForm {...props} />
+                  }} 
+                />
                 <Route path="/not-found" component={NotFound} />
                 <Redirect from="/" exact to="/movies" />
                 <Redirect to="/not-found" />

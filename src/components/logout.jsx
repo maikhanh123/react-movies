@@ -1,8 +1,9 @@
-import { Component } from 'react'
+import { Component } from 'react';
+import {logout} from  "../services/authService";
 
 export default class Logout extends Component {
     componentDidMount = () => {
-      localStorage.removeItem("token");
+      logout();
       window.location = "/";
     };
     
