@@ -83,9 +83,9 @@ class Movies extends Component {
         </div>
         <div className="col-9">
           { user &&
-          <Link to="/movie/new" className="btn btn-primary">
-            New Movie
-          </Link>
+              <Link to="/movie/new" className="btn btn-primary">
+                New Movie
+              </Link>
           }
           <h2>Showing {totalCount} movies in the database</h2>
 
