@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { getMovies, deleteMovie } from "../services/movieService";
 import { getGenres } from "../services/genreService";
 import MoviesTable from "./moviesTable";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 import Pagination from "./common/pagination";
 import ListGroup from "./common/list-groupt";
@@ -22,13 +22,42 @@ class Movies extends Component {
     selectedGenre: null
   };
 
-  async componentDidMount() {
-    const { data: genres } = await getGenres();
-    const { data: movies } = await getMovies();
+  componentDidMount() {
+    // const { data: genres } = await getGenres();
+    // const { data: movies } = await getMovies();
 
-    this.setState({
-      genres: genres,
-      movies: movies
+    //using promise
+    var movies;
+    const p = new Promise((resolve, reject) => {
+      let movieCall = getMovies();
+      resolve(movieCall);
+      reject(new Error("message"));
+    });
+    p.then(
+      result => {
+        console.log(result.data);
+        movies = result.data;
+        this.setState({
+          movies: movies
+        });
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
+    var genres;
+    const genrePromise = new Promise((resolve, reject) => {
+      let genresCall = getGenres();
+      resolve(genresCall);
+      reject(new Error("message"));
+    });
+    genrePromise.then(result => {
+      console.log(result.data);
+      genres = result.data;
+      this.setState({
+        genres: genres
+      });
     });
   }
 
@@ -44,7 +73,6 @@ class Movies extends Component {
     // const filtered = selectedGenre && selectedGenre._id
     //   ? movies.filter(m => m.genre._id === selectedGenre._id)
     //   : movies;
-
     let filtered = movies;
     if (searchQuery) {
       filtered = movies.filter(m =>
@@ -62,9 +90,9 @@ class Movies extends Component {
   }
 
   render() {
-    const { length: count } = this.state.movies;
+    const count = this.state.movies.length;
     const { selectedGenre, genres, sortColumn, searchQuery } = this.state;
-    const {user} = this.props;
+    const { user } = this.props;
 
     if (count === 0) {
       return <h2>No have movie</h2>;
@@ -82,11 +110,11 @@ class Movies extends Component {
           />
         </div>
         <div className="col-9">
-          { user &&
-              <Link to="/movie/new" className="btn btn-primary">
-                New Movie
-              </Link>
-          }
+          {user && (
+            <Link to="/movie/new" className="btn btn-primary">
+              New Movie
+            </Link>
+          )}
           <h2>Showing {totalCount} movies in the database</h2>
 
           <input
